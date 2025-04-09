@@ -2,7 +2,7 @@ from esphome.components import select
 import esphome.config_validation as cv
 import esphome.codegen as cg
 from esphome.const import CONF_OPTIONS
-from . import INTELLIFLO_CHILD_SCHEMA, CONF_INTELLIFLO_ID
+from . import INTELLIFLO_CHILD_SCHEMA, CONF_INTELLIFLO_ID, intelliflo_ns, IntellifloComponent
 
 DEPENDENCIES = ["pentair_intelliflo"]
 
@@ -13,13 +13,9 @@ CONF_SELECTS = [
     "Regulated Flow",
 ]
 
-intelliflo_ns = cg.esphome_ns.namespace("intelliflo")
-
-IntellifloComponent = intelliflo_ns.class_("Intelliflo", cg.Component)
-
 CONFIG_SCHEMA = cv.Schema(
     {
-        cv.Required(CONF_PUMPMODE): select.select_schema(
+        cv.Optional(CONF_PUMPMODE): select.select_schema(
           IntellifloComponent
         ),
     }
