@@ -13,6 +13,10 @@ CONF_SELECTS = [
     "Regulated Flow",
 ]
 
+intelliflo_ns = cg.esphome_ns.namespace("intelliflo")
+
+IntellifloComponent = intelliflo_ns.class_("Intelliflo", cg.Component)
+
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.Required(CONF_PUMPMODE): select.select_schema(
