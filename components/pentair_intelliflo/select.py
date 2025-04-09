@@ -15,6 +15,7 @@ CONF_SELECTS = [
 
 CONFIG_SCHEMA = cv.Schema(
     {
+        cv.GenerateID(CONF_INTELLIFLO_ID): cv.use_id(IntellifloComponent),
         cv.Optional(CONF_PUMPMODE): select.select_schema(
           IntellifloComponent
         ),
