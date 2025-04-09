@@ -81,6 +81,8 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
 
   text_sensor::TextSensor *program_;
 
+  select::Select *pumpmode_selector_{nullptr};
+
  public:
   void set_power(sensor::Sensor *sensor) { power_ = sensor; }
   void set_rpm(sensor::Sensor *sensor) { rpm_ = sensor; }
@@ -90,6 +92,8 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
   void set_running(binary_sensor::BinarySensor *sensor) { running_ = sensor; }
 
   void set_program(text_sensor::TextSensor *sensor) { program_ = sensor; }
+
+  void void set_operating_mode_select(select::Select *selector) { pumpmode_selector_ = selector; };
 };
 
 }  // namespace intelliflo
