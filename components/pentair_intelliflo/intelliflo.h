@@ -63,15 +63,11 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
   void QueuePacket(uint8_t message[], int messageLength);
 
   void requestPumpStatus();
-  void pumpToLocalControl();
-  void pumpToRemoteControl();
   void run();
   void stop();
   void commandLocalProgram(int prog);
   void commandExternalProgram(int prog);
   void saveValueForProgram(int prog, int value);
-  void commandRPM(int rpm);
-  void commandFlow(int flow);  // In m3/H * 10
 
   sensor::Sensor *power_;
   sensor::Sensor *rpm_;
@@ -95,6 +91,11 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
   void set_program(text_sensor::TextSensor *sensor) { program_ = sensor; }
 
   //void void set_operating_mode_select(select::Select *selector) { pumpmode_selector_ = selector; };
+
+  void commandRPM(int rpm);
+  void commandFlow(int flow);  // In m3/H * 10
+  void pumpToLocalControl();
+  void pumpToRemoteControl();
 };
 
 }  // namespace intelliflo
