@@ -41,7 +41,50 @@ uart:
   tx_pin: GPIO17
   rx_pin: GPIO18
   baud_rate: 9600
+
+number:
+  - platform: template
+    id: pump_rpm
+    name: "Pump RPM"
+    unit_of_measurement: "RPM"
+    mode: BOX
+    optimistic: true
+    restore_value: True
+    min_value: 450
+    max_value: 3450
+    step: 1
   
+  - platform: template
+    id: pump_flow
+    name: "Pump Flow"
+    device_class: volume_flow_rate
+    unit_of_measurement: "m³/h"
+    mode: BOX
+    optimistic: true
+    restore_value: True
+    min_value: 4.0
+    max_value: 20.0
+    step: 0.1
+
+interval:
+  - interval: 10s
+    then:
+      - if: 
+          condition: 
+            - lambda: 'return id(pump_select).state == "RPM";'
+          then:
+            - lambda: !lambda |- 
+                id(pentair).pumpToRemoteControl();
+                id(pentair).commandRPM(id(pump_rpm).state);
+                id(pentair).requestPumpStatus();
+      - if: 
+          condition: 
+            - lambda: 'return id(pump_select).state == "Flow";'
+          then:
+            - lambda: !lambda |- 
+                id(pentair).pumpToRemoteControl();
+                id(pentair).commandFlow(id(pump_flow).state * 10);
+                id(pentair).requestPumpStatus();
 
 sensor:
   - platform: pentair_intelliflo
@@ -65,4 +108,43 @@ text_sensor:
     program:
       name: "Program"
 
+button:
+  - platform: template
+      name: "Pentair test"
+      entity_category: CONFIG
+      on_press: 
+        then: 
+          - lambda: !lambda |- 
+              id(pentair).pumpToRemoteControl();
+              id(pentair).commandRPM(1000);
+
+select:
+  - platform: template
+    id: pump_select
+    name: "Pump mode"
+    optimistic: True
+    options: 
+      - Local
+      - RPM
+      - Flow
+    on_value:
+      then:
+        - if: 
+            condition: 
+              - lambda: 'return x == "RPM";'
+            then:
+              - lambda: !lambda |- 
+                  id(pentair).pumpToRemoteControl();
+                  id(pentair).commandRPM(id(pump_rpm).state);
+                  id(pentair).requestPumpStatus();
+        - if: 
+            condition: 
+              - lambda: 'return x == "Flow";'
+            then:
+              - lambda: !lambda |- 
+                  id(pentair).pumpToRemoteControl();
+                  id(pentair).commandFlow(id(pump_flow).state * 10);
+                  id(pentair).requestPumpStatus();
+
 pentair_intelliflo:
+  id: pentair
