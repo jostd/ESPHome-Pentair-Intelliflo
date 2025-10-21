@@ -34,7 +34,7 @@ captive_portal:
 external_components:
   - source:
       type: git
-      url: https://github.com/nicostrown/ESPHome-Pentair-Intelliflo
+      url: https://github.com/jostd/ESPHome-Pentair-Intelliflo
     refresh: 0s
 
 uart:
@@ -126,7 +126,6 @@ select:
     options: 
       - Local
       - RPM
-      - Flow
     on_value:
       then:
         - if: 
@@ -136,14 +135,6 @@ select:
               - lambda: !lambda |- 
                   id(pentair).pumpToRemoteControl();
                   id(pentair).commandRPM(id(pump_rpm).state);
-                  id(pentair).requestPumpStatus();
-        - if: 
-            condition: 
-              - lambda: 'return x == "Flow";'
-            then:
-              - lambda: !lambda |- 
-                  id(pentair).pumpToRemoteControl();
-                  id(pentair).commandFlow(id(pump_flow).state * 10);
                   id(pentair).requestPumpStatus();
 
 pentair_intelliflo:
