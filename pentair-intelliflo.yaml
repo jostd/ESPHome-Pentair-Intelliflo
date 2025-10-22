@@ -1,11 +1,14 @@
 esphome:
   name: intelliflo
   friendly_name: Intelliflo
+  platformio_options:
+    upload_speed: 115200 # Example upload speed
 
 esp32:
-  board: esp32-s3-devkitc-1
+  # platform: ESP32
+  board: esp32dev
   framework:
-    type: arduino
+    type: esp-idf
 
 # Enable logging
 logger:
@@ -13,7 +16,7 @@ logger:
 # Enable Home Assistant API
 api:
   encryption:
-    key: "your_key"
+    key: !secret api_password
 
 ota:
   - platform: esphome
@@ -26,7 +29,7 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "${device_name} Fallback Hotspot"
+    ssid: "intelliflo"
     password: !secret intelliflo_hotspot_password
 
 captive_portal:
@@ -110,13 +113,13 @@ text_sensor:
 
 button:
   - platform: template
-      name: "Pentair test"
-      entity_category: CONFIG
-      on_press: 
-        then: 
-          - lambda: !lambda |- 
-              id(pentair).pumpToRemoteControl();
-              id(pentair).commandRPM(1000);
+    name: "Pentair test"
+    entity_category: CONFIG
+    on_press: 
+      then: 
+        - lambda: !lambda |- 
+            id(pentair).pumpToRemoteControl();
+            id(pentair).commandRPM(1000);
 
 select:
   - platform: template
