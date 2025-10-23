@@ -10,7 +10,6 @@ CONF_PUMPMODE = "pump_mode"
 CONF_SELECTS = [
     "Local",
     "Regulated RPM",
-    "Regulated Flow",
 ]
 
 CONFIG_SCHEMA = cv.Schema(
