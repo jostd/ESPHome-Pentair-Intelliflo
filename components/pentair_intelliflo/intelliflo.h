@@ -4,7 +4,7 @@
 #include "esphome/components/sensor/sensor.h"
 //#include "esphome/components/select/select.h"
 // #include "esphome/components/switch/switch.h"
-#include "esphome/components/text_sensor/text_sensor.h"
+//#include "esphome/components/text_sensor/text_sensor.h"
 #include "esphome/components/uart/uart.h"
 // #include "esphome/core/automation.h"
 #include "esphome/core/component.h"
@@ -69,7 +69,7 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
 
   binary_sensor::BinarySensor *running_;
 
-  text_sensor::TextSensor *program_;
+  //text_sensor::TextSensor *program_;
 
   //select::Select *pumpmode_selector_{nullptr};
 
@@ -81,7 +81,7 @@ class Intelliflo : public uart::UARTDevice, public PollingComponent {
 
   void set_running(binary_sensor::BinarySensor *sensor) { running_ = sensor; }
 
-  void set_program(text_sensor::TextSensor *sensor) { program_ = sensor; }
+  //void set_program(text_sensor::TextSensor *sensor) { program_ = sensor; }
 
   //void void set_operating_mode_select(select::Select *selector) { pumpmode_selector_ = selector; };
 

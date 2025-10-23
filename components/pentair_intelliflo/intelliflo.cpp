@@ -127,7 +127,7 @@ void Intelliflo::parse_packet(const std::vector<uint8_t> &data) {
           break;
       }
 
-    if (this->program_ != nullptr)
+    /*if (this->program_ != nullptr)
       switch (data[7]) {
         case NO_PROG:
           this->program_->publish_state("");
@@ -171,7 +171,7 @@ void Intelliflo::parse_packet(const std::vector<uint8_t> &data) {
         default:
           ESP_LOGW(TAG, "Received unknown program value %0x02x", data[7]);
           break;
-      }
+      }*/ 
 
     // this->status = packet.data[2];   // 0x01=Priming 0x02=Running 0xFF=?
     if (this->power_ != nullptr)
