@@ -8,6 +8,7 @@ DEPENDENCIES = ["pentair_intelliflo"]
 
 CONF_PUMPMODE = "pump_mode"
 CONF_SELECTS = [
+    "off",
     "Local",
     "Regulated RPM",
 ]
