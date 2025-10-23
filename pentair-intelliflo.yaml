@@ -12,6 +12,10 @@ esp32:
 
 # Enable logging
 logger:
+  level: INFO
+  logs:
+    # Set the logging level for the light component to NONE.
+    light: NONE
 
 # Enable Home Assistant API
 api:
@@ -190,7 +194,7 @@ light:
             float brightness;
 
             // Calculate a sine wave to create a smooth brightness change
-            brightness = (sin(step * M_PI / step_limit) + 1) / 2;
+            brightness = (sin(step * M_PI / step_limit) + 1) / 2.2 + .05;
 
             // Set the color and brightness
             auto call = id(atom_light).turn_on();
