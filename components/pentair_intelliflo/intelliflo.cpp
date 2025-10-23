@@ -178,10 +178,10 @@ void Intelliflo::parse_packet(const std::vector<uint8_t> &data) {
       this->power_->publish_state((data[9] * 256) + data[10]);
     if (this->rpm_ != nullptr)
       this->rpm_->publish_state((data[11] * 256) + data[12]);
-    if (this->flow_ != nullptr)
-      this->flow_->publish_state(data[13] * 0.227);  // GPM to m3/hr
-    if (this->pressure_ != nullptr)
-      this->pressure_->publish_state(data[14] / 14.504);  // PSI to bar
+    //if (this->flow_ != nullptr)
+    //  this->flow_->publish_state(data[13] * 0.227);  // GPM to m3/hr
+    //if (this->pressure_ != nullptr)
+    //  this->pressure_->publish_state(data[14] / 14.504);  // PSI to bar
     //
     //
     // this->timer_hour = packet.data[11];

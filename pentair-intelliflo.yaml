@@ -37,7 +37,7 @@ captive_portal:
 external_components:
   - source:
       type: git
-      url: https://github.com/jostd/ESPHome-Pentair-Intelliflo
+      url: https://github.com/jostd/ESPHome-Pentair-Intelliflo-VS
     refresh: 0s
 
 uart:
