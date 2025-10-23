@@ -6,9 +6,9 @@ esphome:
 
 esp32:
   # platform: ESP32
-  board: esp32dev
+  board: m5stack-atom
   framework:
-    type: esp-idf
+    type: arduino
 
 # Enable logging
 logger:
@@ -41,8 +41,8 @@ external_components:
     refresh: 0s
 
 uart:
-  tx_pin: GPIO17
-  rx_pin: GPIO18
+  tx_pin: GPIO19
+  rx_pin: GPIO22
   baud_rate: 9600
 
 number:
@@ -57,17 +57,17 @@ number:
     max_value: 3450
     step: 1
   
-  - platform: template
-    id: pump_flow
-    name: "Pump Flow"
-    device_class: volume_flow_rate
-    unit_of_measurement: "m³/h"
-    mode: BOX
-    optimistic: true
-    restore_value: True
-    min_value: 4.0
-    max_value: 20.0
-    step: 0.1
+  #- platform: template
+  #  id: pump_flow
+  #  name: "Pump Flow"
+  #  device_class: volume_flow_rate
+  #  unit_of_measurement: "m³/h"
+  #  mode: BOX
+  #  optimistic: true
+  #  restore_value: True
+  #  min_value: 4.0
+  #  max_value: 20.0
+  #  step: 0.1
 
 interval:
   - interval: 10s
@@ -80,36 +80,52 @@ interval:
                 id(pentair).pumpToRemoteControl();
                 id(pentair).commandRPM(id(pump_rpm).state);
                 id(pentair).requestPumpStatus();
-      - if: 
-          condition: 
-            - lambda: 'return id(pump_select).state == "Flow";'
-          then:
-            - lambda: !lambda |- 
-                id(pentair).pumpToRemoteControl();
-                id(pentair).commandFlow(id(pump_flow).state * 10);
-                id(pentair).requestPumpStatus();
+      #- if: 
+      #    condition: 
+      #      - lambda: 'return id(pump_select).state == "Flow";'
+      #    then:
+      #      - lambda: !lambda |- 
+      #          id(pentair).pumpToRemoteControl();
+      #          id(pentair).commandFlow(id(pump_flow).state * 10);
+      #          id(pentair).requestPumpStatus();
 
 sensor:
   - platform: pentair_intelliflo
     power:
       name: "Power"
+      id: pump_power
     rpm:
       name: "RPM"
-    flow:
-      name: "Flow"
-    pressure:
-      name: "Pressure"
-      unit_of_measurement: "bar"
+    #flow:
+    #  name: "Flow"
+    #pressure:
+    #  name: "Pressure"
+    #  unit_of_measurement: "bar"
+
+  - platform: total_daily_energy
+    #power: power
+    power_id: pump_power
+    name: 'Total Daily Energy'
+    unit_of_measurement: 'kWh'
+    state_class: total_increasing
+    device_class: energy
+    accuracy_decimals: 3
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
 
 binary_sensor:
   - platform: pentair_intelliflo
     running:
       name: "Running"
 
-text_sensor:
-  - platform: pentair_intelliflo
-    program:
-      name: "Program"
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+#text_sensor:
+#  - platform: pentair_intelliflo
+#    program:
+#      name: "Program"
 
 button:
   - platform: template
@@ -127,6 +143,7 @@ select:
     name: "Pump mode"
     optimistic: True
     options: 
+      - "off"
       - Local
       - RPM
     on_value:
@@ -138,6 +155,15 @@ select:
               - lambda: !lambda |- 
                   id(pentair).pumpToRemoteControl();
                   id(pentair).commandRPM(id(pump_rpm).state);
+                  id(pentair).run();
+                  id(pentair).requestPumpStatus();
+        - if: 
+            condition: 
+              - lambda: 'return x == "off";'
+            then:
+              - lambda: !lambda |- 
+                  id(pentair).pumpToRemoteControl();
+                  id(pentair).stop();
                   id(pentair).requestPumpStatus();
 
 pentair_intelliflo:
