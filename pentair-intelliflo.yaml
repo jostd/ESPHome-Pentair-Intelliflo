@@ -22,9 +22,17 @@ api:
   encryption:
     key: !secret api_password
 
+web_server:
+  port: 80
+  id: webota
+  auth:
+    username: !secret web_server_username
+    password: !secret web_server_password
+
 ota:
   - platform: esphome
     password: !secret intelliflo_ota_password
+  - platform: web_server
 
 wifi:
   networks:
@@ -133,14 +141,17 @@ time:
 #      name: "Program"
 
 button:
-  - platform: template
-    name: "Pentair test"
-    entity_category: CONFIG
-    on_press: 
-      then: 
-        - lambda: !lambda |- 
-            id(pentair).pumpToRemoteControl();
-            id(pentair).commandRPM(1000);
+  # - platform: template
+  #   name: "Pentair test"
+  #   entity_category: CONFIG
+  #   on_press: 
+  #     then: 
+  #       - lambda: !lambda |- 
+  #           id(pentair).pumpToRemoteControl();
+  #           id(pentair).commandRPM(1000);
+  - platform: restart
+    name: "Atom_Restart"
+    id: atomrestart
 
 select:
   - platform: template
