@@ -194,7 +194,7 @@ light:
             float brightness;
 
             // Calculate a sine wave to create a smooth brightness change
-            brightness = (sin(step * M_PI / step_limit) + 1) / 2.2 + .05;
+            brightness = (sin(step * M_PI / step_limit) +1) *.45 + .1; // Normalize to 0.1 - 1.0
 
             // Set the color and brightness
             auto call = id(atom_light).turn_on();
