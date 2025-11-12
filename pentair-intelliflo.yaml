@@ -4,9 +4,13 @@ esphome:
   platformio_options:
     upload_speed: 115200 # Example upload speed
 
+# Waveshare ESP32-S3-RS485-CAN
+# -> 16 MB flash
+# -> 8 MB psram
 esp32:
   # platform: ESP32
-  board: m5stack-atom
+  board: esp32s3box #esp32-s3-devkitc-1
+  flash_size: 16MB
   framework:
     type: arduino
 
@@ -54,8 +58,9 @@ external_components:
     refresh: 0s
 
 uart:
-  tx_pin: GPIO19
-  rx_pin: GPIO22
+  tx_pin: GPIO17
+  rx_pin: GPIO18
+  flow_control_pin: GPIO21
   baud_rate: 9600
 
 number:
@@ -183,69 +188,5 @@ select:
                   id(pentair).stop();
                   id(pentair).requestPumpStatus();
 
-light:
-  - platform: neopixelbus
-    type: GRB
-    pin: GPIO27
-    num_leds: 1
-    variant: sk6812
-    name: "Atom RGB Light"
-    id: atom_light
-    restore_mode: RESTORE_DEFAULT_OFF
-    effects:
-      - random:
-          name: "Random"
-          transition_length: 1s
-          update_interval: 1s
-      - lambda:
-          name: "Breathing Effect"
-          update_interval: 150ms # Controls the smoothness of the fade
-          lambda: |-
-            static int step = 0;
-            const int step_limit = 20; 
-            float brightness;
-
-            // Calculate a sine wave to create a smooth brightness change
-            brightness = (sin(step * M_PI / step_limit) +1) *.40 + .1;
-
-            // Set the color and brightness
-            auto call = id(atom_light).turn_on();
-            call.set_rgb(0.0, 1.0, 0.0); 
-            call.set_transition_length(150);
-            call.set_brightness(brightness);
-            //call.set_publish(false);
-            call.set_save(false);
-            call.perform();            
-            step = ++step % (step_limit * 2);
-
-  # - platform: rgbw
-  #   name: ${friendly_name}
-  #   red: pwm_r
-  #   green: pwm_g
-  #   blue: pwm_b
-  #   white: pwm_w
-  #   effects:
-  #     - lambda:
-  #       name: Breathing
-  #       update_interval: 16s
-  #       lambda: |-
-  #         static int state = 0;
-  #         static int color = 1;
-  #         auto call = id(atom_light).turn_on(); //the id of your light
-  #         call.set_transition_length(15000);
-  #         if (state == 0) 
-  #         {
-  #           call.set_brightness(1.0);
-  #         }
-  #         else if (state == 1)
-  #         {
-  #           call.set_brightness(0.01);
-  #         }
-  #           call.perform();
-  #           state ++;
-  #           if (state == 2){
-  #           state = 0;
-  #         }
-              
 pentair_intelliflo:
   id: pentair
