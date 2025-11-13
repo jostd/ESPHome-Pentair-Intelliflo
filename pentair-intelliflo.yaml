@@ -52,10 +52,13 @@ captive_portal:
 
 external_components:
   - source:
-      type: git
-      url: https://github.com/jostd/ESPHome-Pentair-Intelliflo-VS
-      ref: main
-    refresh: 0s
+      #type: git
+      #url: https://github.com/jostd/ESPHome-Pentair-Intelliflo-VS
+      #url: file:ESPHome-Pentair-Intelliflo-VS
+      #ref: main
+      type: local
+      path: /config/esphome/ESPHome-Pentair-Intelliflo-VS/components
+    #refresh: 0s
 
 uart:
   tx_pin: GPIO17
